@@ -10,7 +10,7 @@ import rbadia.voidspace.sounds.SoundManager;
  * Platforms arranged in triangular form. 
  * Asteroids travel at 225 degree angle
  */
-public class Level3State extends Level1State {
+public class Level3State extends Level2State {
 	
 	private static final long serialVersionUID = -2094575762243216079L;
 
@@ -70,7 +70,7 @@ public class Level3State extends Level1State {
 		}
 	}
 
-	/*@Override
+	@Override
 	public Platform[] newPlatforms(int n){
 		platforms = new Platform[n];
 		for(int i=0; i<n; i++){
@@ -84,5 +84,5 @@ public class Level3State extends Level1State {
 			}
 		}
 		return platforms;
-	}*/
+	}
 }
