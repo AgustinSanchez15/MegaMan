@@ -18,6 +18,7 @@ public class InputHandler implements KeyListener{
 	private boolean mIsPressed;
 	private boolean sIsPressed;
 	private boolean iIsPressed;
+	private static boolean lastPressedL = false;
 
 	private LevelState levelState;
 	//private GameScreen gScreen;
@@ -45,6 +46,7 @@ public class InputHandler implements KeyListener{
 		mIsPressed = false;
 		sIsPressed = false;
 		iIsPressed = false;
+		lastPressedL = false;
 	}
 
 	public boolean isLeftPressed() {
@@ -90,6 +92,10 @@ public class InputHandler implements KeyListener{
 	public boolean isIPressed() {
 		return iIsPressed;
 	}
+	
+	public static boolean lastPressedL() {
+		return lastPressedL;
+	}
 
 	/**
 	 * Handle a key input event.
@@ -103,9 +109,11 @@ public class InputHandler implements KeyListener{
 			this.downIsPressed = true;
 			break;
 		case KeyEvent.VK_LEFT:
+			lastPressedL = true;
 			this.leftIsPressed = true;
 			break;
 		case KeyEvent.VK_RIGHT:
+			lastPressedL = false;
 			this.rightIsPressed = true;
 			break;
 		case KeyEvent.VK_SPACE:

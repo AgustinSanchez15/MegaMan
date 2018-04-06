@@ -24,6 +24,7 @@ import rbadia.voidspace.model.Platform;
  */
 public class GraphicsManager {
 	private BufferedImage megaManImg;
+	private BufferedImage megaManLImg;
 	private BufferedImage megaFallRImg;
 	private BufferedImage megaFireRImg;
 	private BufferedImage floorImg;
@@ -42,6 +43,7 @@ public class GraphicsManager {
 		// load images
 		try {
 			this.megaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaMan3.png"));
+			this.megaManLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaMan3L.png"));
 			this.megaFallRImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFallRight.png"));
 			this.megaFireRImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireRight.png"));
 			this.floorImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFloor.png"));
@@ -68,6 +70,10 @@ public class GraphicsManager {
 
 	public void drawMegaMan (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaManImg, megaMan.x, megaMan.y, observer);	
+	}
+	
+	public void drawMegaManL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(megaManLImg, megaMan.x, megaMan.y, observer);	
 	}
 
 	public void drawMegaFallR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
