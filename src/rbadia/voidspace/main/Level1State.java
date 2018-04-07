@@ -375,7 +375,7 @@ public class Level1State extends LevelState {
 		}
 	}
 
-	protected void drawPlatforms() {
+	protected void drawPlatforms()  {
 		//draw platforms
 		Graphics2D g2d = getGraphics2D();
 		for(int i=0; i<getNumPlatforms(); i++){
