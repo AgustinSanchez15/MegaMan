@@ -9,6 +9,9 @@ public abstract class GameObject extends Rectangle{
 	private int speed;
 	private int direction;
 	
+	public static final int LEFT = -1;
+	public static final int RIGHT = 1;
+	
 	public GameObject() {}
 	
 	public GameObject(int xPos, int yPos, int width, int height) {

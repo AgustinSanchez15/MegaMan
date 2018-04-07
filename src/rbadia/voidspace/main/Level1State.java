@@ -22,6 +22,7 @@ import rbadia.voidspace.model.Asteroid;
 import rbadia.voidspace.model.BigBullet;
 import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.Floor;
+import rbadia.voidspace.model.GameObject;
 import rbadia.voidspace.model.MegaMan;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
@@ -304,12 +305,17 @@ public class Level1State extends LevelState {
 		Graphics2D g2d = getGraphics2D();
 		for(int i=0; i<bullets.size(); i++){
 			Bullet bullet = bullets.get(i);
-			getGraphicsManager().drawBullet(bullet, g2d, this);
+			if(megaMan.getDirection() == -1) {
+				getGraphicsManager().drawBulletL(bullet, g2d, this);
+			} else {
+				getGraphicsManager().drawBullet(bullet, g2d, this);
+			}
 
 			boolean remove =   this.moveBullet(bullet);
 			if(remove){
 				bullets.remove(i);
 				i--;
+
 			}
 		}
 	}
@@ -343,17 +349,29 @@ public class Level1State extends LevelState {
 		Graphics2D g2d = getGraphics2D();
 		GameStatus status = getGameStatus();
 		if(!status.isNewMegaMan()){
-			if((Gravity() == true) || ((Gravity() == true) && (Fire() == true || Fire2() == true))){
-				getGraphicsManager().drawMegaFallR(megaMan, g2d, this);
+			if(Gravity() || (Gravity() && (Fire() || Fire2()))){
+				if(megaMan.getDirection() == -1) {
+					getGraphicsManager().drawMegaFallL(megaMan, g2d, this);
+				} else {
+					getGraphicsManager().drawMegaFallR(megaMan, g2d, this);
+				}
 			}
 		}
 
-		if((Fire() == true || Fire2()== true) && (Gravity()==false)){
-			getGraphicsManager().drawMegaFireR(megaMan, g2d, this);
+		if((Fire() || Fire2() || FireL() || Fire2L()) && (Gravity()==false)){
+			if(megaMan.getDirection() == - 1) {
+				getGraphicsManager().drawMegaFireL(megaMan, g2d, this);
+			} else {
+				getGraphicsManager().drawMegaFireR(megaMan, g2d, this);
+			} 
 		}
 
-		if((Gravity()==false) && (Fire()==false) && (Fire2()==false)){
-			getGraphicsManager().drawMegaMan(megaMan, g2d, this);
+		if(!Gravity() && !Fire() && !Fire2() && !FireL() && !Fire2L()){
+			if(megaMan.getDirection() == -1) {
+				getGraphicsManager().drawMegaManL(megaMan, g2d, this);
+			} else {
+				getGraphicsManager().drawMegaMan(megaMan, g2d, this);
+			}
 		}
 	}
 
@@ -424,6 +442,7 @@ public class Level1State extends LevelState {
 			if((bullet.getX() > megaMan.getX() + megaMan.getWidth()) && 
 					(bullet.getX() <= megaMan.getX() + megaMan.getWidth() + 60)){
 				return true;
+
 			}
 		}
 		return false;
@@ -443,6 +462,36 @@ public class Level1State extends LevelState {
 		return false;
 	}
 
+	//Bullet fire pose
+		protected boolean FireL(){
+			MegaMan megaMan = this.getMegaMan();
+			List<Bullet> bullets = this.getBullets();
+			for(int i=0; i<bullets.size(); i++){
+				Bullet bullet = bullets.get(i);
+				if((bullet.getX() < megaMan.getX()) && 
+						(bullet.getX() >= megaMan.getX() - 60)){
+					return true;
+
+				}
+			}
+			return false;
+		}
+
+		//BigBullet fire pose
+		protected boolean Fire2L(){
+			MegaMan megaMan = this.getMegaMan();
+			List<BigBullet> bigBullets = this.getBigBullets();
+			for(int i=0; i<bigBullets.size(); i++){
+				BigBullet bigBullet = bigBullets.get(i);
+				if((bigBullet.getX() < megaMan.getX()) && 
+						(bigBullet.getX() >= megaMan.getX() - 60)){
+					return true;
+				}
+			}
+			return false;
+		}
+
+	
 	//Platform Gravity
 	public boolean Fall(){
 		MegaMan megaMan = this.getMegaMan(); 
@@ -477,9 +526,17 @@ public class Level1State extends LevelState {
 	 * Fire a bullet from life.
 	 */
 	public void fireBullet(){
-		Bullet bullet = new Bullet(megaMan.x + megaMan.width - Bullet.WIDTH/2,
-				megaMan.y + megaMan.width/2 - Bullet.HEIGHT +2);
-		bullets.add(bullet);
+		if(megaMan.getDirection() == -1) {
+			Bullet bullet = new Bullet(megaMan.x - Bullet.WIDTH/2,
+					megaMan.y + megaMan.width/2 - Bullet.HEIGHT +2);
+			bullet.setDirection(megaMan.getDirection());
+			bullets.add(bullet);
+		} else {
+			Bullet bullet = new Bullet(megaMan.x + megaMan.width - Bullet.WIDTH/2,
+					megaMan.y + megaMan.width/2 - Bullet.HEIGHT +2);
+			bullet.setDirection(megaMan.getDirection());
+			bullets.add(bullet);
+		}
 		this.getSoundManager().playBulletSound();
 	}
 
@@ -501,14 +558,15 @@ public class Level1State extends LevelState {
 	 * @return if the bullet should be removed from screen
 	 */
 	public boolean moveBullet(Bullet bullet){
-		if(bullet.getY() - bullet.getSpeed() >= 0){
-			bullet.translate(bullet.getSpeed(), 0);
+		if(bullet.getY() - bullet.getSpeed() >= 0){ 
+			bullet.translate(bullet.getSpeed()*bullet.getDirection(), 0);
 			return false;
 		}
 		else{
 			return true;
 		}
 	}
+
 
 	/** Move a "Power Shot" bullet once fired.
 	 * @param bigBullet the bullet to move
@@ -529,6 +587,7 @@ public class Level1State extends LevelState {
 	 */
 	public MegaMan newMegaMan(){
 		this.megaMan = new MegaMan((SCREEN_WIDTH - MegaMan.WIDTH) / 2, (SCREEN_HEIGHT - MegaMan.HEIGHT - MegaMan.Y_OFFSET) / 2);
+		this.megaMan.setDirection(GameObject.RIGHT);
 		return megaMan;
 	}
 
@@ -590,6 +649,7 @@ public class Level1State extends LevelState {
 		if(megaMan.getX() - megaMan.getSpeed() >= 0){
 			megaMan.translate(-megaMan.getSpeed(), 0);
 		}
+		megaMan.setDirection(GameObject.LEFT);
 	}
 
 	/**
@@ -600,6 +660,7 @@ public class Level1State extends LevelState {
 		if(megaMan.getX() + megaMan.getSpeed() + megaMan.width < SCREEN_WIDTH){
 			megaMan.translate(megaMan.getSpeed(), 0);
 		}
+		megaMan.setDirection(GameObject.RIGHT);
 	}
 
 	public void speedUpMegaMan() {

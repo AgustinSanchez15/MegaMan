@@ -24,8 +24,11 @@ import rbadia.voidspace.model.Platform;
  */
 public class GraphicsManager {
 	private BufferedImage megaManImg;
+	private BufferedImage megaManLImg;
 	private BufferedImage megaFallRImg;
+	private BufferedImage megaFallLImg;
 	private BufferedImage megaFireRImg;
+	private BufferedImage megaFireLImg;
 	private BufferedImage floorImg;
 	private BufferedImage platformImg;
 	private BufferedImage bulletImg;
@@ -42,8 +45,11 @@ public class GraphicsManager {
 		// load images
 		try {
 			this.megaManImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaMan3.png"));
+			this.megaManLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaMan3L.png"));
 			this.megaFallRImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFallRight.png"));
+			this.megaFallLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFallLeft.png"));
 			this.megaFireRImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireRight.png"));
+			this.megaFireLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFireLeft.png"));
 			this.floorImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/megaFloor.png"));
 			this.platformImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/platform3.png"));
 			this.asteroidImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/asteroid.png"));
@@ -69,13 +75,25 @@ public class GraphicsManager {
 	public void drawMegaMan (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaManImg, megaMan.x, megaMan.y, observer);	
 	}
+	
+	public void drawMegaManL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(megaManLImg, megaMan.x, megaMan.y, observer);	
+	}
 
 	public void drawMegaFallR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaFallRImg, megaMan.x, megaMan.y, observer);	
 	}
 
+	public void drawMegaFallL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(megaFallLImg, megaMan.x, megaMan.y, observer);	
+	}
+	
 	public void drawMegaFireR (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(megaFireRImg, megaMan.x, megaMan.y, observer);	
+	}
+	
+	public void drawMegaFireL (MegaMan megaMan, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(megaFireLImg, megaMan.x, megaMan.y, observer);	
 	}
 
 	public void drawFloor (Floor floor, Graphics2D g2d, ImageObserver observer, int i){
@@ -96,6 +114,10 @@ public class GraphicsManager {
 	 * @param observer object to be notified
 	 */
 	public void drawBullet(Bullet bullet, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(bulletImg, bullet.x, bullet.y, observer);
+	}
+	
+	public void drawBulletL(Bullet bullet, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(bulletImg, bullet.x, bullet.y, observer);
 	}
 
