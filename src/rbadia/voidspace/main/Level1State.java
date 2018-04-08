@@ -545,10 +545,19 @@ public class Level1State extends LevelState {
 	 */
 	public void fireBigBullet(){
 		//BigBullet bigBullet = new BigBullet(megaMan);
-		int xPos = megaMan.x + megaMan.width - BigBullet.WIDTH / 2;
-		int yPos = megaMan.y + megaMan.width/2 - BigBullet.HEIGHT + 4;
-		BigBullet  bigBullet = new BigBullet(xPos, yPos);
-		bigBullets.add(bigBullet);
+		if(megaMan.getDirection() == -1) {
+			int xPos = megaMan.x - BigBullet.WIDTH / 2;
+			int yPos = megaMan.y + megaMan.width/2 - BigBullet.HEIGHT + 4;
+			BigBullet  bigBullet = new BigBullet(xPos, yPos);
+			bigBullets.add(bigBullet);
+			bigBullet.setDirection(megaMan.getDirection());
+		} else {
+			int xPos = megaMan.x + megaMan.width - BigBullet.WIDTH / 2;
+			int yPos = megaMan.y + megaMan.width/2 - BigBullet.HEIGHT + 4;
+			BigBullet  bigBullet = new BigBullet(xPos, yPos);
+			bigBullets.add(bigBullet);
+			bigBullet.setDirection(megaMan.getDirection());
+		}
 		this.getSoundManager().playBulletSound();
 	}
 
@@ -574,7 +583,7 @@ public class Level1State extends LevelState {
 	 */
 	public boolean moveBigBullet(BigBullet bigBullet){
 		if(bigBullet.getY() - bigBullet.getSpeed() >= 0){
-			bigBullet.translate(bigBullet.getSpeed(), 0);
+			bigBullet.translate(bigBullet.getSpeed()*bigBullet.getDirection(), 0);
 			return false;
 		}
 		else{
