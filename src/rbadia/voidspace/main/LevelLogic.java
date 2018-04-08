@@ -27,6 +27,7 @@ public class LevelLogic {
 	private int stack= 0;
 	private int mute = 0;
 
+	private boolean lifeAdded = false;
 	private LevelState levelState;
 
 	protected Font originalFont;
@@ -434,6 +435,19 @@ public class LevelLogic {
 
 		if(ih.isRightPressed()){
 			getLevelState().moveMegaManRight();
+		}
+
+		if(ih.isIPressed()) {
+			if(!lifeAdded) {
+				status.setLivesLeft(status.getLivesLeft()+1);
+				lifeAdded = true;
+			} 
+		} else {
+			lifeAdded = false;
+		}
+
+		if(ih.isRPressed()) {
+			getLevelState().setLevelAsteroidsDestroyed(0);
 		}
 	}
 

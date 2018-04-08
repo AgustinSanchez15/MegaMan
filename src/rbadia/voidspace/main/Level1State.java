@@ -58,8 +58,6 @@ public class Level1State extends LevelState {
 	protected Font bigFont;
 	protected Font biggestFont;
 
-	protected int levelAsteroidsDestroyed = 0;
-
 	// Constructors
 	public Level1State(int level, MainFrame frame, GameStatus status, 
 			LevelLogic gameLogic, InputHandler inputHandler,

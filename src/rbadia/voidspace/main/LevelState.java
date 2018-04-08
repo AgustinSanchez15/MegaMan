@@ -8,6 +8,7 @@ import rbadia.voidspace.sounds.SoundManager;
 public abstract class LevelState extends JPanel {
 	
 	protected static final long serialVersionUID = 1L;
+	protected int levelAsteroidsDestroyed = 0;
 	
 	//Base Screen Size
 	public static final int SCREEN_WIDTH = 500;
@@ -57,6 +58,10 @@ public abstract class LevelState extends JPanel {
 	public void setGraphics2D(Graphics2D g2d) { this.g2d = g2d; }
 	public void setCurrentState(int nextState) { this.currentState = nextState; }
 	public void setStartState(int startState) { this.startState = startState; }
+	
+	public void setLevelAsteroidsDestroyed(int levelAsteroidsDestroyed) {
+		this.levelAsteroidsDestroyed = levelAsteroidsDestroyed;
+	}
 		
 	// Level FSM state methods
 	public abstract void doStart();

@@ -18,6 +18,8 @@ public class InputHandler implements KeyListener{
 	private boolean mIsPressed;
 	private boolean sIsPressed;
 	private boolean iIsPressed;
+	private boolean nIsPressed;
+	private boolean rIsPressed;
 
 	private LevelState levelState;
 	//private GameScreen gScreen;
@@ -45,6 +47,8 @@ public class InputHandler implements KeyListener{
 		mIsPressed = false;
 		sIsPressed = false;
 		iIsPressed = false;
+		nIsPressed = false;
+		rIsPressed = false;
 	}
 
 	public boolean isLeftPressed() {
@@ -91,6 +95,14 @@ public class InputHandler implements KeyListener{
 		return iIsPressed;
 	}
 	
+	public boolean isNPressed() {
+		return nIsPressed;
+	}
+	
+	public boolean isRPressed() {
+		return rIsPressed;
+	}
+	
 
 	/**
 	 * Handle a key input event.
@@ -133,6 +145,11 @@ public class InputHandler implements KeyListener{
 		case KeyEvent.VK_I:
 			this.iIsPressed = true;
 			break;
+		case KeyEvent.VK_N:
+			this.nIsPressed = true;
+			break;
+		case KeyEvent.VK_R:
+			this.rIsPressed = true;
 		}
 		e.consume();
 	}
@@ -176,12 +193,16 @@ public class InputHandler implements KeyListener{
 		case KeyEvent.VK_I:
 			this.iIsPressed = false;
 			break;
+		case KeyEvent.VK_N:
+			this.nIsPressed = false;
+		case KeyEvent.VK_R:
+			this.rIsPressed = false;
 		}
 		e.consume();
 	}
 
 	public void keyTyped(KeyEvent e) {
-		// not used
+		//do nothing lol
 	}
 
 	public boolean getSpace(){
