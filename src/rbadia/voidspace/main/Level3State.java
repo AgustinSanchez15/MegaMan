@@ -2,6 +2,8 @@ package rbadia.voidspace.main;
 import java.awt.Graphics2D;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.model.Floor;
+import rbadia.voidspace.model.MegaMan;
 import rbadia.voidspace.model.Platform;
 import rbadia.voidspace.sounds.SoundManager;
 
@@ -63,5 +65,79 @@ public class Level3State extends Level2State {
 			}
 		}
 		return platforms;
+	}
+
+	/*public void movePlatform(Platform platform) {
+		platform.translate(0, platform.getSpeed());
+		if(platform.getY() <= 200) {
+			platform.setSpeed(1);
+		} 
+		if(platform.getY() >= SCREEN_HEIGHT- Floor.HEIGHT/2) {
+			platform.setSpeed(-1);
+		}
+	}*/
+
+	//Methods to move platform 2, 5 and megaMan (if he's on top of them) sideways
+	public void movePlatformHorizontal2(Platform platform) {
+		platform.translate(platform.getSpeed(), 0);
+		if(platform.getX() <= 0) {
+			platform.setSpeed(1);
+		} 
+		if(platform.getX() >= 50+ 2*50) {
+			platform.setSpeed(-1);
+		}
+		if(!Fall2()) {
+			megaMan.translate(platform.getSpeed(), 0);
+		}
+	}
+
+	public void movePlatformHorizontal5(Platform platform) {
+		platform.translate(platform.getSpeed(), 0);
+		if(platform.getX() <= 50+ 5*50) {
+			platform.setSpeed(1);
+		} 
+		if(platform.getX() >= 0 + 7 * Floor.WIDTH) {
+			platform.setSpeed(-1);
+		}
+		if(!Fall5()) {
+			megaMan.translate(platform.getSpeed(), 0);
+		}
+	}
+
+	//Checks if megaMan is on top of platform 2 and 5
+	public boolean Fall2(){
+		MegaMan megaMan = this.getMegaMan(); 
+		Platform[] platforms = this.getPlatforms();
+		if((((platforms[2].getX() < megaMan.getX()) && (megaMan.getX()< platforms[2].getX() + platforms[2].getWidth()))
+				|| ((platforms[2].getX() < megaMan.getX() + megaMan.getWidth()) 
+						&& (megaMan.getX() + megaMan.getWidth()< platforms[2].getX() + platforms[2].getWidth())))
+				&& megaMan.getY() + megaMan.getHeight() == platforms[2].getY()
+				){
+			return false;
+		}
+		return true;
+	}
+
+	public boolean Fall5(){
+		MegaMan megaMan = this.getMegaMan(); 
+		Platform[] platforms = this.getPlatforms();
+		if((((platforms[5].getX() < megaMan.getX()) && (megaMan.getX()< platforms[5].getX() + platforms[5].getWidth()))
+				|| ((platforms[5].getX() < megaMan.getX() + megaMan.getWidth()) 
+						&& (megaMan.getX() + megaMan.getWidth()< platforms[5].getX() + platforms[5].getWidth())))
+				&& megaMan.getY() + megaMan.getHeight() == platforms[5].getY()
+				){
+			return false;
+		}
+		return true;
+	}
+
+	//Animate the platform 2 and 5 sideways
+	protected void drawPlatforms()  {
+		Graphics2D g2d = getGraphics2D();
+		movePlatformHorizontal2(platforms[2]);
+		movePlatformHorizontal5(platforms[5]);
+		for(int i=0; i<getNumPlatforms(); i++){
+			getGraphicsManager().drawPlatform(platforms[i], g2d, this, i);
+		}
 	}
 }
