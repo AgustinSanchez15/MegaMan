@@ -67,16 +67,6 @@ public class Level3State extends Level2State {
 		return platforms;
 	}
 
-	/*public void movePlatform(Platform platform) {
-		platform.translate(0, platform.getSpeed());
-		if(platform.getY() <= 200) {
-			platform.setSpeed(1);
-		} 
-		if(platform.getY() >= SCREEN_HEIGHT- Floor.HEIGHT/2) {
-			platform.setSpeed(-1);
-		}
-	}*/
-
 	//Methods to move platform 2, 5 and megaMan (if he's on top of them) sideways
 	public void movePlatformHorizontal2(Platform platform) {
 		platform.translate(platform.getSpeed(), 0);
@@ -96,7 +86,7 @@ public class Level3State extends Level2State {
 		if(platform.getX() <= 50+ 5*50) {
 			platform.setSpeed(1);
 		} 
-		if(platform.getX() >= 0 + 7 * Floor.WIDTH) {
+		if(platform.getX() >= 450) {
 			platform.setSpeed(-1);
 		}
 		if(!FallMovingPlatforms(5)) {
