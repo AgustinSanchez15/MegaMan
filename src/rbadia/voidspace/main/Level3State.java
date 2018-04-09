@@ -86,7 +86,7 @@ public class Level3State extends Level2State {
 		if(platform.getX() >= 50+ 2*50) {
 			platform.setSpeed(-1);
 		}
-		if(!Fall2()) {
+		if(!FallMovingPlatforms(2)) {
 			megaMan.translate(platform.getSpeed(), 0);
 		}
 	}
@@ -99,32 +99,19 @@ public class Level3State extends Level2State {
 		if(platform.getX() >= 0 + 7 * Floor.WIDTH) {
 			platform.setSpeed(-1);
 		}
-		if(!Fall5()) {
+		if(!FallMovingPlatforms(5)) {
 			megaMan.translate(platform.getSpeed(), 0);
 		}
 	}
 
 	//Checks if megaMan is on top of platform 2 and 5
-	public boolean Fall2(){
+	public boolean FallMovingPlatforms(int n){
 		MegaMan megaMan = this.getMegaMan(); 
 		Platform[] platforms = this.getPlatforms();
-		if((((platforms[2].getX() < megaMan.getX()) && (megaMan.getX()< platforms[2].getX() + platforms[2].getWidth()))
-				|| ((platforms[2].getX() < megaMan.getX() + megaMan.getWidth()) 
-						&& (megaMan.getX() + megaMan.getWidth()< platforms[2].getX() + platforms[2].getWidth())))
-				&& megaMan.getY() + megaMan.getHeight() == platforms[2].getY()
-				){
-			return false;
-		}
-		return true;
-	}
-
-	public boolean Fall5(){
-		MegaMan megaMan = this.getMegaMan(); 
-		Platform[] platforms = this.getPlatforms();
-		if((((platforms[5].getX() < megaMan.getX()) && (megaMan.getX()< platforms[5].getX() + platforms[5].getWidth()))
-				|| ((platforms[5].getX() < megaMan.getX() + megaMan.getWidth()) 
-						&& (megaMan.getX() + megaMan.getWidth()< platforms[5].getX() + platforms[5].getWidth())))
-				&& megaMan.getY() + megaMan.getHeight() == platforms[5].getY()
+		if((((platforms[n].getX() < megaMan.getX()) && (megaMan.getX()< platforms[n].getX() + platforms[n].getWidth()))
+				|| ((platforms[n].getX() < megaMan.getX() + megaMan.getWidth()) 
+						&& (megaMan.getX() + megaMan.getWidth()< platforms[n].getX() + platforms[n].getWidth())))
+				&& megaMan.getY() + megaMan.getHeight() == platforms[n].getY()
 				){
 			return false;
 		}
