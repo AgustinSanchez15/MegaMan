@@ -140,6 +140,10 @@ public class GraphicsManager {
 	public void drawAsteroid(Asteroid asteroid, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(asteroidImg, asteroid.x, asteroid.y, observer);
 	}
+	
+	public void drawAsteroid2(Asteroid asteroid, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(asteroidImg, asteroid.x, asteroid.y, observer);
+	}
 
 	/**
 	 * Draws a MegaMan explosion image to the specified graphics canvas.
