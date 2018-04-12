@@ -21,6 +21,8 @@ public class Level3State extends Level2State {
 
 	private static final long serialVersionUID = -2094575762243216079L;
 	protected Asteroid asteroid2;
+	protected long lastAsteroidTime2;
+	public Random randSpeed = new Random();
 
 	// Constructors
 	public Level3State(int level, MainFrame frame, GameStatus status, 
@@ -69,12 +71,34 @@ public class Level3State extends Level2State {
 	
 	@Override
 	public void doStart() {	
-		GameStatus status = this.getGameStatus();
 		newAsteroid2(this);
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
-		status.setNewAsteroid2(false);
+	}
+	
+	@Override
+	protected void drawAsteroid() {
+		GameStatus status = getGameStatus();
+		Graphics2D g2d = getGraphics2D();
+		if((asteroid.getX() + asteroid.getPixelsWide() >  0)) {
+			asteroid.translate(-asteroid.getSpeed(), asteroid.getSpeed()/2);
+			getGraphicsManager().drawAsteroid(asteroid, g2d, this);	
+		}
+		else {
+			int updatedSpeed = randSpeed.nextInt(4) + 3;
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY){
+				lastAsteroidTime = currentTime;
+				asteroid.setLocation(SCREEN_WIDTH - asteroid.getPixelsWide(),
+						rand.nextInt(SCREEN_HEIGHT - asteroid.getPixelsTall() - 32));
+				asteroid.setSpeed(updatedSpeed);
+			}
+			else {
+				// draw explosion
+				getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+			}
+		}	
 	}
 	
 	// Creates the additional asteroid
@@ -89,18 +113,18 @@ public class Level3State extends Level2State {
 	protected void drawAsteroid2() {
 		// Asteroid2
 		Graphics2D g2d = getGraphics2D();
-				if((asteroid2.getX() + asteroid2.getWidth() <  SCREEN_WIDTH)){
-					Random rand = new Random();
-					int constant = rand.nextInt(4);
-					asteroid2.translate(asteroid2.getSpeed() + constant, asteroid2.getSpeed()/2 + constant);
+				if((asteroid2.getX() + asteroid2.getWidth() <  SCREEN_WIDTH + asteroid.getWidth())){
+					asteroid2.translate(asteroid2.getSpeed(), asteroid2.getSpeed()/2);
 					getGraphicsManager().drawAsteroid2(asteroid2, g2d, this);	
 				}
 				else {
+					int updatedSpeed = randSpeed.nextInt(4) + 3;
 					long currentTime = System.currentTimeMillis();
-					if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY){
+					if((currentTime - lastAsteroidTime2) > NEW_ASTEROID_DELAY){
 						// draw a new asteroid
-						lastAsteroidTime = currentTime;
+						lastAsteroidTime2 = currentTime;
 						asteroid2.setLocation(asteroid2.getPixelsWide(), (rand.nextInt((int) (SCREEN_HEIGHT - asteroid2.getPixelsTall() - 32))));
+						asteroid2.setSpeed(updatedSpeed);
 					}
 
 					else{
@@ -108,19 +132,6 @@ public class Level3State extends Level2State {
 						getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
 					}
 				}
-	}
-	
-	public void removeAsteroid2(Asteroid asteroid){
-		asteroidExplosion = new Rectangle(
-				asteroid.x,
-				asteroid.y,
-				asteroid.getPixelsWide(),
-				asteroid.getPixelsTall());
-		asteroid.setLocation(-asteroid.getPixelsWide(), -asteroid.getPixelsTall());
-		this.getGameStatus().setNewAsteroid(true);
-		lastAsteroidTime = System.currentTimeMillis();
-		// play asteroid explosion sound
-		this.getSoundManager().playAsteroidExplosionSound();
 	}
 	
 	// Check bulletCollisions for second asteroid
@@ -141,7 +152,7 @@ public class Level3State extends Level2State {
 		}
 	}
 	
-	// Check big 
+	// Check big bullet collisions for second asteroid 
 	protected void checkBigBulletAsteroidCollisions2() {
 		GameStatus status = getGameStatus();
 		for(int i=0; i<bigBullets.size(); i++){
@@ -155,6 +166,7 @@ public class Level3State extends Level2State {
 		}
 	}
 	
+	// Check MegaMan collision with second asteroid
 	protected void checkMegaManAsteroidCollisions2() {
 		GameStatus status = getGameStatus();
 		if(asteroid2.intersects(megaMan)){
@@ -167,10 +179,23 @@ public class Level3State extends Level2State {
 		for(int i=0; i<9; i++){
 			if(asteroid2.intersects(floor[i])){
 				removeAsteroid2(asteroid2);
-
 			}
 		}
 	}
+	
+	public void removeAsteroid2(Asteroid asteroid){
+		// "remove" asteroid2
+		asteroidExplosion = new Rectangle(
+				asteroid.x,
+				asteroid.y,
+				asteroid.getPixelsWide(),
+				asteroid.getPixelsTall());
+		asteroid.setLocation(-asteroid.getPixelsWide(), -asteroid.getPixelsTall());
+		lastAsteroidTime2 = System.currentTimeMillis();
+		// play asteroid explosion sound
+		this.getSoundManager().playAsteroidExplosionSound();
+	}
+
 	
 	@Override
 	public Platform[] newPlatforms(int n){
