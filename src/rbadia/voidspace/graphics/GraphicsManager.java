@@ -37,6 +37,7 @@ public class GraphicsManager {
 	private BufferedImage asteroidExplosionImg;
 	private BufferedImage megaManExplosionImg;
 	private BufferedImage bigAsteroidExplosionImg;
+	private BufferedImage powerUpImg;
 
 	/**
 	 * Creates a new graphics manager and loads the game images.
@@ -56,6 +57,7 @@ public class GraphicsManager {
 			this.asteroidExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/asteroidExplosion.png"));
 			this.bulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bullet.png"));
 			this.bigBulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigBullet.png"));
+			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/ship.png"));
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -105,7 +107,11 @@ public class GraphicsManager {
 	
 	public void drawPlatform2 (Platform platform, Graphics2D g2d, ImageObserver observer, int i){
 		g2d.drawImage(platformImg, platform.x , platform.y, observer);	
-}
+	}
+	
+	public void drawPowerUp (MegaMan ship, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(powerUpImg, ship.x , ship.y, observer);	
+	}
 
 	/**
 	 * Draws a bullet image to the specified graphics canvas.
