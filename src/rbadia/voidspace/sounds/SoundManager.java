@@ -15,6 +15,8 @@ public class SoundManager {
     "/rbadia/voidspace/sounds/shipExplosion.wav"));
     private AudioClip bulletSound = Applet.newAudioClip(Level1State.class.getResource(
     "/rbadia/voidspace/sounds/laser.wav"));
+    private AudioClip getPowerUpSound = Applet.newAudioClip(Level1State.class.getResource(
+    "/rbadia/voidspace/sounds/getPowerUp.wav"));
     
     /**
      * Plays sound for bullets fired by the ship.
@@ -51,6 +53,18 @@ public class SoundManager {
     		new Thread(new Runnable(){
     			public void run() {
     				shipExplosionSound.play();
+    			}
+    		}).start();	
+    	}
+    }
+    
+    //Plays when MegaMan gets the PowerUp
+    public void playGetPowerUpSound(){
+		// play sound for asteroid explosions
+    	if(SOUND_ON){
+    		new Thread(new Runnable(){
+    			public void run() {
+    				getPowerUpSound.play();
     			}
     		}).start();	
     	}

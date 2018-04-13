@@ -156,6 +156,7 @@ public class Level4State extends Level3State {
 	public void powerUpCollisionMegaMan() {
 		GameStatus status = getGameStatus();
 		if(powerUp.intersects(megaMan)){
+			this.getSoundManager().playGetPowerUpSound();
 			status.setLivesLeft(status.getLivesLeft() + 5);
 			removePowerUp();
 		}
