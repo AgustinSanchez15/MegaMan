@@ -57,7 +57,7 @@ public class GraphicsManager {
 			this.asteroidExplosionImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/asteroidExplosion.png"));
 			this.bulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bullet.png"));
 			this.bigBulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigBullet.png"));
-			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/ship.png"));
+			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/powerUp.png"));
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",

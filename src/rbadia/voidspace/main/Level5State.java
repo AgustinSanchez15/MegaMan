@@ -13,5 +13,10 @@ public class Level5State extends Level2State{
 			super(level, frame, status, gameLogic, inputHandler, graphicsMan, soundMan);
 		}
 		
+		@Override 
+		public void drawAsteroid(){
+			
+		}
+		
 		
 }
