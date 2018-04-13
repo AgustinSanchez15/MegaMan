@@ -323,6 +323,10 @@ public class LevelLogic {
 			if(levelState.isLevelWon()) {
 				levelState.setCurrentState(LevelState.LEVEL_WON);
 			}
+			if(status.getLivesLeftBoss() == 0) {
+				levelState.setLevelAsteroidsDestroyed(3);
+				levelState.setCurrentState(LevelState.LEVEL_WON);
+			}
 			break;
 
 		case LevelState.NEW_MEGAMAN:

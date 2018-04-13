@@ -38,6 +38,8 @@ public class GraphicsManager {
 	private BufferedImage megaManExplosionImg;
 	private BufferedImage bigAsteroidExplosionImg;
 	private BufferedImage powerUpImg;
+	private BufferedImage shipLImg;
+	private BufferedImage shipRImg;
 
 	/**
 	 * Creates a new graphics manager and loads the game images.
@@ -58,6 +60,8 @@ public class GraphicsManager {
 			this.bulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bullet.png"));
 			this.bigBulletImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/bigBullet.png"));
 			this.powerUpImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/powerUp.png"));
+			this.shipLImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/shipL.png"));
+			this.shipRImg = ImageIO.read(getClass().getResource("/rbadia/voidspace/graphics/shipR.png"));
 
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "The graphic files are either corrupt or missing.",
@@ -105,12 +109,21 @@ public class GraphicsManager {
 			g2d.drawImage(platformImg, platform.x , platform.y, observer);	
 	}
 	
+	//New methods included 
 	public void drawPlatform2 (Platform platform, Graphics2D g2d, ImageObserver observer, int i){
 		g2d.drawImage(platformImg, platform.x , platform.y, observer);	
 	}
 	
 	public void drawPowerUp (MegaMan ship, Graphics2D g2d, ImageObserver observer){
 		g2d.drawImage(powerUpImg, ship.x , ship.y, observer);	
+	}
+	
+	public void drawShipL (MegaMan shipL, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(shipLImg, shipL.x, shipL.y, observer);	
+	}
+	
+	public void drawShipR (MegaMan shipR, Graphics2D g2d, ImageObserver observer){
+		g2d.drawImage(shipRImg, shipR.x, shipR.y, observer);	
 	}
 
 	/**
@@ -124,6 +137,10 @@ public class GraphicsManager {
 	}
 	
 	public void drawBulletL(Bullet bullet, Graphics2D g2d, ImageObserver observer) {
+		g2d.drawImage(bulletImg, bullet.x, bullet.y, observer);
+	}
+	
+	public void drawBulletShipL(Bullet bullet, Graphics2D g2d, ImageObserver observer) {
 		g2d.drawImage(bulletImg, bullet.x, bullet.y, observer);
 	}
 

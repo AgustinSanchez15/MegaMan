@@ -16,6 +16,7 @@ public class GameStatus {
 	private long asteroidsDestroyed = 0;
 
 	private int livesLeft;
+	private int livesLeftBoss;
 	private int level = 1;
 	
 	public GameStatus(){
@@ -126,6 +127,14 @@ public class GameStatus {
 		this.livesLeft = livesLeft;
 	}
 
+	public synchronized int getLivesLeftBoss() {
+		return livesLeftBoss;
+	}
+
+	public synchronized void setLivesLeftBoss(int livesLeftBoss) {
+		this.livesLeftBoss = livesLeftBoss;
+	}
+	
 	public int getLevel() {
 		return level;
 	}

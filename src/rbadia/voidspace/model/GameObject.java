@@ -8,6 +8,7 @@ public abstract class GameObject extends Rectangle{
 	
 	private int speed;
 	private int direction;
+	private int directionShip;
 	
 	public static final int LEFT = -1;
 	public static final int RIGHT = 1;
@@ -39,5 +40,13 @@ public abstract class GameObject extends Rectangle{
 	
 	public void setDirection(int direction) {
 		this.direction = direction;
+	}
+	
+	public void setDirectionShip(int directionShip) {
+		this.directionShip = directionShip;
+	}
+	
+	public int getDirectionShip() {
+		return directionShip;
 	}
 }
