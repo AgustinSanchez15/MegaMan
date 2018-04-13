@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rbadia.voidspace.graphics.GraphicsManager;
+import rbadia.voidspace.model.BigBullet;
 import rbadia.voidspace.model.Bullet;
 import rbadia.voidspace.model.GameObject;
 import rbadia.voidspace.model.MegaMan;
@@ -14,8 +15,10 @@ public class Level5State extends Level2State{
 	private static final long serialVersionUID = -2094575762243216079L;
 	protected MegaMan shipL;
 	protected List<Bullet> bulletShipL;
+	protected List<BigBullet> bigBulletShipL;
 	protected boolean wait = false;
 	private long lastBulletTime;
+	private long lastBossHitBoxHurtMegaMan = 0;
 
 	public long myLong = 1234;
 
@@ -57,11 +60,14 @@ public class Level5State extends Level2State{
 		drawShipL();
 		moveShipL();
 		drawBulletShipL();
+		drawBigBulletShipL();
 		delayBullet();
 		
 		checkBulletMegaManCollisions();
+		checkBigBulletMegaManCollisions();
 		checkBossMegaManCollisions();
 		checkBulletBossCollisions();
+		checkBigBulletBossCollisions();
 
 		// update asteroids destroyed (score) label  
 		getMainFrame().getDestroyedValueLabel().setText(Long.toString(status.getAsteroidsDestroyed()));
@@ -74,6 +80,7 @@ public class Level5State extends Level2State{
 	public void doStart() {	
 		newShipL(this);
 		bulletShipL = new ArrayList<Bullet>();
+		bigBulletShipL = new ArrayList<BigBullet>();
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
@@ -92,7 +99,6 @@ public class Level5State extends Level2State{
 		Graphics2D g2d = getGraphics2D();
 		getGraphicsManager().drawShipL(shipL, g2d, this);
 	}
-
 
 	//Moves the boss upwards and downwards 
 	public void moveShipL() {
@@ -114,12 +120,31 @@ public class Level5State extends Level2State{
 			return true;
 		}
 	}
+	
+	//Moves the boss big bullets 
+	public boolean moveBulletShipL(BigBullet bigBullet){
+		if(bigBullet.getY() - bigBullet.getSpeed() >= 0){ 
+			bigBullet.translate(bigBullet.getSpeed()*(-1), 0);
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 
 	//Fire the boss bullets 
 	public void fireBulletShipL(){
 		Bullet bullet = new Bullet(shipL.x - Bullet.WIDTH/2, shipL.y + shipL.width/2 - Bullet.HEIGHT +2);
 		bullet.setDirection(GameObject.LEFT);
 		bulletShipL.add(bullet);
+		this.getSoundManager().playBulletSound();
+	}
+	
+	//Fire the boss big bullets
+	public void fireBigBulletShipL(){
+		BigBullet bigBullet = new BigBullet(shipL.x - BigBullet.WIDTH/2, shipL.y + shipL.width/2 - BigBullet.HEIGHT +2);
+		bigBullet.setDirection(GameObject.LEFT);
+		bigBulletShipL.add(bigBullet);
 		this.getSoundManager().playBulletSound();
 	}
 
@@ -134,7 +159,21 @@ public class Level5State extends Level2State{
 			if(remove){
 				bulletShipL.remove(i);
 				i--;
+			}
+		}
+	}
+	
+	//Draws the boss big bullets 
+	protected void drawBigBulletShipL() {
+		Graphics2D g2d = getGraphics2D();
+		for(int i=0; i<bigBulletShipL.size(); i++){
+			BigBullet bigBullet = bigBulletShipL.get(i);
+			getGraphicsManager().drawBigBullet(bigBullet, g2d, this);
 
+			boolean remove =   this.moveBigBullet(bigBullet);
+			if(remove){
+				bigBulletShipL.remove(i);
+				i--;
 			}
 		}
 	}
@@ -145,8 +184,9 @@ public class Level5State extends Level2State{
 		long currentTime = System.currentTimeMillis();
 		if((currentTime - lastBulletTime) > 5000/5){
 			lastBulletTime = currentTime;
-			fireBulletShipL();
-		}
+			int randomBullet = rand.nextInt(9);
+			if(randomBullet <= 6) {fireBulletShipL();}
+			else {fireBigBulletShipL();}}
 	}
 	
 	//Checks if the boss bullets intersect megaMan 
@@ -163,11 +203,29 @@ public class Level5State extends Level2State{
 		}
 	}
 	
+	//Checks if the boss big bullets intersect megaMan 
+	protected void checkBigBulletMegaManCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bigBulletShipL.size(); i++){
+			BigBullet bigBullet = bigBulletShipL.get(i);
+			if(megaMan.intersects(bigBullet)){
+				status.setLivesLeft(status.getLivesLeft() - 2);
+				// remove bullet
+				bigBulletShipL.remove(i);
+				break;
+			}
+		}
+	}
+	
 	//Checks if megaMan intersects the boss 
 	protected void checkBossMegaManCollisions() {
 		GameStatus status = getGameStatus();
 		if(shipL.intersects(megaMan)){
-			status.setLivesLeft(status.getLivesLeft() - 1);
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - lastBossHitBoxHurtMegaMan) > 300) {
+				status.setLivesLeft(status.getLivesLeft() - 1);
+				lastBossHitBoxHurtMegaMan = System.currentTimeMillis();
+			}
 		}
 	}
 	
@@ -181,6 +239,21 @@ public class Level5State extends Level2State{
 				this.getSoundManager().playAsteroidExplosionSound();
 				// remove bullet
 				bullets.remove(i);
+				break;
+			}
+		}
+	}
+	
+	//Checks if the boss intersects megaMan big bullets 
+	protected void checkBigBulletBossCollisions() {
+		GameStatus status = getGameStatus();
+		for(int i=0; i<bigBullets.size(); i++){
+			BigBullet bigBullet = bigBullets.get(i);
+			if(shipL.intersects(bigBullet)){
+				status.setLivesLeftBoss(status.getLivesLeftBoss() - 2);
+				this.getSoundManager().playAsteroidExplosionSound();
+				// remove bullet
+				bigBullets.remove(i);
 				break;
 			}
 		}
