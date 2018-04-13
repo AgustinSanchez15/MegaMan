@@ -79,14 +79,13 @@ public class Level3State extends Level2State {
 	
 	@Override
 	protected void drawAsteroid() {
-		GameStatus status = getGameStatus();
 		Graphics2D g2d = getGraphics2D();
 		if((asteroid.getX() + asteroid.getPixelsWide() >  0)) {
 			asteroid.translate(-asteroid.getSpeed(), asteroid.getSpeed()/2);
 			getGraphicsManager().drawAsteroid(asteroid, g2d, this);	
 		}
 		else {
-			int updatedSpeed = randSpeed.nextInt(4) + 3;
+			int updatedSpeed = randSpeed.nextInt(3) + 2;
 			long currentTime = System.currentTimeMillis();
 			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY){
 				lastAsteroidTime = currentTime;
@@ -118,7 +117,7 @@ public class Level3State extends Level2State {
 					getGraphicsManager().drawAsteroid2(asteroid2, g2d, this);	
 				}
 				else {
-					int updatedSpeed = randSpeed.nextInt(4) + 3;
+					int updatedSpeed = randSpeed.nextInt(3) + 2;
 					long currentTime = System.currentTimeMillis();
 					if((currentTime - lastAsteroidTime2) > NEW_ASTEROID_DELAY){
 						// draw a new asteroid
