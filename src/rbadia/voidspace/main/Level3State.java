@@ -23,6 +23,7 @@ public class Level3State extends Level2State {
 	protected Asteroid asteroid2;
 	protected long lastAsteroidTime2;
 	public Random randSpeed = new Random();
+	protected boolean didAsteroidvsAsteroid;
 
 	// Constructors
 	public Level3State(int level, MainFrame frame, GameStatus status, 
@@ -56,10 +57,11 @@ public class Level3State extends Level2State {
 		checkAsteroidFloorCollisions();
 	
 		drawAsteroid2();
-		checkBullletAsteroidCollisions2();
+		checkBulletAsteroidCollisions2();
 		checkBigBulletAsteroidCollisions2();
 		checkMegaManAsteroidCollisions2();
 		checkAsteroidFloorCollisions2();
+		checkAsteroidvsAsteroidCollision();
 
 		// update asteroids destroyed (score) label  
 		getMainFrame().getDestroyedValueLabel().setText(Long.toString(status.getAsteroidsDestroyed()));
@@ -75,6 +77,7 @@ public class Level3State extends Level2State {
 		super.doStart();
 		setStartState(GETTING_READY);
 		setCurrentState(getStartState());
+		didAsteroidvsAsteroid = false;
 	}
 	
 	@Override
@@ -87,7 +90,7 @@ public class Level3State extends Level2State {
 		else {
 			int updatedSpeed = randSpeed.nextInt(3) + 2;
 			long currentTime = System.currentTimeMillis();
-			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY){
+			if((currentTime - lastAsteroidTime) > NEW_ASTEROID_DELAY || didAsteroidvsAsteroid){
 				lastAsteroidTime = currentTime;
 				asteroid.setLocation(SCREEN_WIDTH - asteroid.getPixelsWide(),
 						rand.nextInt(SCREEN_HEIGHT - asteroid.getPixelsTall() - 32));
@@ -119,8 +122,9 @@ public class Level3State extends Level2State {
 				else {
 					int updatedSpeed = randSpeed.nextInt(3) + 2;
 					long currentTime = System.currentTimeMillis();
-					if((currentTime - lastAsteroidTime2) > NEW_ASTEROID_DELAY){
+					if((currentTime - lastAsteroidTime2) > NEW_ASTEROID_DELAY || didAsteroidvsAsteroid){
 						// draw a new asteroid
+						didAsteroidvsAsteroid = false;
 						lastAsteroidTime2 = currentTime;
 						asteroid2.setLocation(asteroid2.getPixelsWide(), (rand.nextInt((int) (SCREEN_HEIGHT - asteroid2.getPixelsTall() - 32))));
 						asteroid2.setSpeed(updatedSpeed);
@@ -134,7 +138,7 @@ public class Level3State extends Level2State {
 	}
 	
 	// Check bulletCollisions for second asteroid
-	protected void checkBullletAsteroidCollisions2() {
+	protected void checkBulletAsteroidCollisions2() {
 		GameStatus status = getGameStatus();
 		for(int i=0; i<bullets.size(); i++){
 			Bullet bullet = bullets.get(i);
@@ -173,6 +177,17 @@ public class Level3State extends Level2State {
 			removeAsteroid2(asteroid2);
 		}
 	}
+	
+	// Check asteroid versus asteroid collision
+		protected void checkAsteroidvsAsteroidCollision() {
+			Graphics2D g2d = getGraphics2D();
+			if(asteroid2.intersects(asteroid)){
+				removeAsteroid(asteroid);
+				removeAsteroid2(asteroid2);
+				getGraphicsManager().drawAsteroidExplosion(asteroidExplosion, g2d, this);
+				didAsteroidvsAsteroid = true;
+			}
+		}
 	
 	protected void checkAsteroidFloorCollisions2() {
 		for(int i=0; i<9; i++){

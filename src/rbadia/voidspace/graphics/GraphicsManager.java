@@ -192,6 +192,4 @@ public class GraphicsManager {
 		g2d.drawImage(bigAsteroidExplosionImg, bigAsteroidExplosion.x, bigAsteroidExplosion.y, observer);
 	}
 
-
-
 }

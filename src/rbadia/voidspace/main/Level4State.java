@@ -43,7 +43,7 @@ public class Level4State extends Level3State {
 		checkMegaManAsteroidCollisions();
 		checkAsteroidFloorCollisions();
 		drawAsteroid2();
-		checkBullletAsteroidCollisions2();
+		checkBulletAsteroidCollisions2();
 		checkBigBulletAsteroidCollisions2();
 		checkMegaManAsteroidCollisions2();
 		checkAsteroidFloorCollisions2();
